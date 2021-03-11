@@ -1,3 +1,5 @@
+import { Subject, AssessmentClass, Assessment } from './interfaces'
+
 const HTTP: XMLHttpRequest = new XMLHttpRequest();
 const BASE_URL: string = 'https://gwa-maid-backend.herokuapp.com'
 
@@ -43,18 +45,18 @@ export function register(username: string, password: string): string | null {
     return data.token;
 }
 
-export function get_subjects(token: string): any {
+export function get_subjects(token: string): Subject[] {
     const url: string = BASE_URL + '/subjects';
 
     let json_parameters: string = JSON.stringify({
         token: token
     })
 
-    let data = JSON.parse(request(url, json_parameters, 'GET'));
+    let data: {success: boolean, subjects: Subject[]} = JSON.parse(request(url, json_parameters, 'GET'));
 
     if (!data.success) return null;
 
-    return data.subjects
+    return data.subjects;
 }
 
 export function add_subject(token: string, subject_name: string): boolean {
@@ -65,12 +67,12 @@ export function add_subject(token: string, subject_name: string): boolean {
         subject_name: subject_name
     });
 
-    let data = JSON.parse(request(url, json_parameters, 'POST'))
+    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'))
 
     return data.success;
 }
 
-export function get_assessment_classes(token: string, subject_name: string): any {
+export function get_assessment_classes(token: string, subject_name: string): AssessmentClass[] {
     const url: string = BASE_URL + '/subjects/assessment_classes';
 
     let json_parameters: string = JSON.stringify({
@@ -78,7 +80,7 @@ export function get_assessment_classes(token: string, subject_name: string): any
         subject_name: subject_name
     });
 
-    let data = JSON.parse(request(url, json_parameters, 'GET'))
+    let data: {success: boolean, assessment_classes: AssessmentClass[]} = JSON.parse(request(url, json_parameters, 'GET'))
 
     if (!data.success) return null;
 
@@ -94,12 +96,12 @@ export function add_assessment_class(token: string, subject_name: string, assess
         assessment_class_name: assessment_class_name
     });
 
-    let data = JSON.parse(request(url, json_parameters, 'POST'))
+    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'))
 
     return data.success;
 }
 
-export function get_assessments(token: string, subject_name: string, assessment_class_name: string): any {
+export function get_assessments(token: string, subject_name: string, assessment_class_name: string): Assessment[] {
     const url: string = BASE_URL + '/subjects/assessment_classes/assessments';
 
     let json_parameters: string = JSON.stringify({
@@ -108,11 +110,11 @@ export function get_assessments(token: string, subject_name: string, assessment_
         assessment_class_name: assessment_class_name
     });
 
-    let data = JSON.parse(request(url, json_parameters, 'GET'));
+    let data: {success: boolean, assessments: Assessment[]} = JSON.parse(request(url, json_parameters, 'GET'));
 
     if (!data.success) return null;
 
-    return data.assesssment_classes;
+    return data.assessments;
 }
 
 export function add_assessment(token: string, subject_name: string, assessment_class_name: string, assessment_name: string): boolean {
@@ -125,7 +127,7 @@ export function add_assessment(token: string, subject_name: string, assessment_c
         assessment_name: assessment_name
     });
 
-    let data = JSON.parse(request(url, json_parameters, 'POST'));
+    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'));
 
     return data.success;
 }
