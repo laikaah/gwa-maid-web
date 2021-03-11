@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='description' content=''>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <title>GWA Maid</title>
+
+    <!-- Bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <link rel='stylesheet' href='styles.css'>
+
+    <script src='script.js'></script>
+</head>
+
+<body>
+    <a href="/home.html" class="btn btn-outline-primary m-2">Home</a>
+    <button onclick="history.back()" class="btn btn-outline-primary m-2">Back</button>
+    <h1 class="text-center p-5">Your grade for this assessment is: loading grade</h1>
+
+    <p class="text-center text-muted">Update your grade for this assessment:</p>
+    <form action="" method="post" class="mx-auto w-50">
+        <div class="form-group m-2">
+            <label>Grade</label>
+            <input type="number" name="updated_assessment_grade" class="form-control" placeholder="Enter updated grade">
+        </div>
+        <button class="btn btn-primary m-2">Update grade</button>
+    </form>
+</body>
+
+</html>

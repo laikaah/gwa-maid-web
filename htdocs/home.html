@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='description' content=''>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+
+    <title>GWA Maid</title>
+
+    <!-- Bootstrap CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <link rel='stylesheet' href='styles.css'>
+
+    <script src='script.js'></script>
+</head>
+
+<body>
+    <h1 class="text-center p-5">Here's your prediction: loading prediction</h1>
+
+    <p class="text-center text-muted">Add a new subject:</p>
+    <form action="" method="post" class="mx-auto w-50">
+        <div class="form-group m-2">
+            <label>Subject name</label>
+            <input type="text" name="subject_name" class="form-control" placeholder="Enter subject name">
+        </div>
+        <div class="form-group m-2">
+            <label>Subject weight in percent</label>
+            <input type="number" name="subject_weight" class="form-control" placeholder="Enter subject weight">
+        </div>
+        <button class="btn btn-primary m-2">Create subject</button>
+    </form>
+
+    <table class="table p-5 m-5">
+        <thead>
+            <tr>
+                <th>Subjects</th>
+                <th>Last updated</th>
+                <th>Predicted grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>CS</td>
+                <td>November 28, 2021</td>
+                <td>1.0</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
