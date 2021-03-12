@@ -15,6 +15,20 @@ function request(url: string, json_parameters: string, method: string): string {
     return data;
 }
 
+export function verify_token(token: string | null): boolean {
+    if (token == null){
+        return false;
+    }
+
+    const url: string = BASE_URL + '/verify_token';
+
+    let json_parameters: string = JSON.stringify({
+        token: token
+    })
+
+    return JSON.parse(request(url, json_parameters, 'POST')).success
+}
+
 export function login(username: string, password: string): string | null {
     const url: string = BASE_URL + '/login';
     
