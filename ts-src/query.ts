@@ -56,7 +56,15 @@ export function get_subjects(token: string): Subject[] {
 
     if (!data.success) return null;
 
-    return data.subjects;
+    return data.subjects.map((subject) => {
+        return {
+            id: subject.id,
+            name: subject.name,
+            weight: subject.weight,
+            assessment_classes_names: subject.assessment_classes_names,
+            predicted_grade: subject.predicted_grade
+        }
+    });
 }
 
 export function add_subject(token: string, subject_name: string): boolean {
@@ -84,7 +92,16 @@ export function get_assessment_classes(token: string, subject_name: string): Ass
 
     if (!data.success) return null;
 
-    return data.assessment_classes;
+    return data.assessment_classes.map((assessment_class) => {
+        return {
+            id: assessment_class.id,
+            name: assessment_class.name,
+            subject_id: assessment_class.subject_id,
+            weight: assessment_class.weight,
+            assessments_names: assessment_class.assessments_names,
+            predicted_grade: assessment_class.predicted_grade
+        };
+    });
 }
 
 export function add_assessment_class(token: string, subject_name: string, assessment_class_name: string): boolean {
@@ -114,7 +131,14 @@ export function get_assessments(token: string, subject_name: string, assessment_
 
     if (!data.success) return null;
 
-    return data.assessments;
+    return data.assessments.map((assessment) => {
+        return {
+            id: assessment.id,
+            name: assessment.name,
+            assessment_class_id: assessment.assessment_class_id,
+            grade: assessment.grade
+        }
+    });
 }
 
 export function add_assessment(token: string, subject_name: string, assessment_class_name: string, assessment_name: string): boolean {

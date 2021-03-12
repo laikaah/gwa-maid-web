@@ -1,6 +1,11 @@
 {
     "compilerOptions": {
         "target": "ESNext",
-        "lib": ["dom", "ES2019"]
-    }
+        "lib": ["dom", "ES2019"],
+        "pretty": true,
+        "outDir": "scripts"
+    },
+    "include": [
+        "ts-src"
+    ]
 }
