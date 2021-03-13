@@ -1,27 +1,41 @@
-import * as query from './query'
+import * as query from './query.js'
+import * as helpers from './helpers.js'
+
+console.log('index')
+
+// check for localStorage support
+if (!helpers.verify_local_storage()){
+    alert('We\'re sorry, but your browser does not support local storage. Our site will not work for you.')
+    window.close()
+}
 
 // if user has an existing token, verify it
 // if it's valid, redirect to home.html
 
 let token: string = localStorage.getItem('token')
 
-if (query.verify_token(token)){
-    window.location.replace(window.location.origin + '/home.html')
-}
+query.verify_token(token).then((object) => {
+    if (object){
+        window.location.replace(window.location.origin + '/htdocs/home.html');
+    } else {
+        console.log("isn't valid")
+    }
+})
 
-document.addEventListener('DOMContentLoaded', () => {
-    const form: HTMLElement = document.getElementById('login-form');
+document.addEventListener('DOMContentLoaded', async () => {
+    const form: HTMLFormElement = <HTMLFormElement> document.getElementById('login-form');
 
-    form.onsubmit = () => {
-        const username: string = (<HTMLInputElement> document.getElementById('username')).value
+    
+    form.onsubmit = async () => {
+        const username: string = (<HTMLInputElement> form.elements.namedItem('username')).value
 
-        const password: string = (<HTMLInputElement> document.getElementById('password')).value
+        const password: string = (<HTMLInputElement> form.elements.namedItem('password')).value
 
-        let response: string | null = query.login(username, password);
+        let response_token: string | null = await query.login(username, password)
 
-        if (response != null){
+        if (response_token != null){
             localStorage.setItem('token', token);
-            window.location.replace(window.location.origin + '/home.html')
+            window.location.replace(window.location.origin + '/htdocs/home.html')
         } else {
             alert('Incorrect credentials.')
             window.location.reload();

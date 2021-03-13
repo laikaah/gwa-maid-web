@@ -1,3 +1,8 @@
+export interface Response {
+    success: boolean,
+    [key: string]: any
+}
+
 export interface Subject {
     id: number
     name: string,

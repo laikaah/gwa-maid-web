@@ -1,76 +1,105 @@
-import { Subject, AssessmentClass, Assessment } from './interfaces'
+import { Response, Subject, AssessmentClass, Assessment } from './interfaces'
 
-const HTTP: XMLHttpRequest = new XMLHttpRequest();
-const BASE_URL: string = 'https://gwa-maid-backend.herokuapp.com'
+const BASE_URL: string = 'http://127.0.0.1:5000'
 
-function request(url: string, json_parameters: string, method: string): string {
-    HTTP.open(method, url);
-    HTTP.setRequestHeader('Content-Type', 'application/json');
-    HTTP.send(json_parameters);
+async function request(url: string, json_parameters: {[key: string]: any}, method: string): Promise<Response|null> {
 
-    let data: any;
-    HTTP.onload = (e) => {
-        data = JSON.parse(HTTP.responseText);
-    };
-    return data;
+    let init: RequestInit;
+
+    if (method === 'POST'){
+        init = <RequestInit> {
+            url: url,
+            method: method,
+            headers: new Headers({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }),
+            mode: 'no-cors',
+            cors: 'default',
+            cache: <RequestCache> 'default',
+            body: JSON.stringify(json_parameters)
+        };
+    } else if (method === 'GET') {
+        init = <RequestInit> {
+            url: url,
+            method: method,
+            mode: 'no-cors',
+            cors: 'default',
+            cache: <RequestCache> 'default'
+        };
+        // if method is GET append the json parameters to 
+        // the url as arguments
+        url += new URLSearchParams(json_parameters).toString();
+    } else {
+        return null
+    }
+
+    let request = new Request(url, init);
+
+    console.log(request)
+
+    return fetch(request).then((response) => {
+        return response.json();
+    });
 }
 
-export function verify_token(token: string | null): boolean {
-    if (token == null){
-        return false;
-    }
+export async function verify_token(token: string | null): Promise<any> {
+    if (token == null) return false;
 
     const url: string = BASE_URL + '/verify_token';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token
-    })
+    };
 
-    return JSON.parse(request(url, json_parameters, 'POST')).success
+    let response = await request(url, json_parameters, 'POST');
+    console.log(response)
+
+    return response;
 }
 
-export function login(username: string, password: string): string | null {
+export async function login(username: string, password: string): Promise<string | null> {
     const url: string = BASE_URL + '/login';
     
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         username: username,
         password: password
-    });
-    
-    let data = JSON.parse(request(url, json_parameters, 'POST'))
+    };
 
-    if (!data.success) return null;
+    let response = await request(url, json_parameters, 'POST');
 
-    return data.token;
+    if (!response.success) return null;
+
+    return response.token;
 }
 
-export function register(username: string, password: string): string | null {
+export async function register(username: string, password: string): Promise<string | null> {
     const url: string = BASE_URL + '/register'
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         username: username,
         password: password
-    });
-    
-    let data = JSON.parse(request(url, json_parameters, 'POST'))
+    };
 
-    if (!data.success) return null;
+    let response = await request(url, json_parameters, 'POST')
 
-    return data.token;
+    if (!response.success) return null;
+
+    return response.token;
 }
 
-export function get_subjects(token: string): Subject[] {
+export async function get_subjects(token: string): Promise<Subject[]|null> {
     const url: string = BASE_URL + '/subjects';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token
-    })
+    };
 
-    let data: {success: boolean, subjects: Subject[]} = JSON.parse(request(url, json_parameters, 'GET'));
+    let response = await request(url, json_parameters, 'GET')
 
-    if (!data.success) return null;
+    if (!response.success) return null;
 
-    return data.subjects.map((subject) => {
+    return response.subjects.map((subject: Subject) => {
         return {
             id: subject.id,
             name: subject.name,
@@ -81,32 +110,32 @@ export function get_subjects(token: string): Subject[] {
     });
 }
 
-export function add_subject(token: string, subject_name: string): boolean {
+export async function add_subject(token: string, subject_name: string): Promise<boolean> {
     const url: string = BASE_URL + '/subject/add';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token,
         subject_name: subject_name
-    });
+    };
 
-    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'))
+    let response = await request(url, json_parameters, 'POST');
 
-    return data.success;
+    return response.success;
 }
 
-export function get_assessment_classes(token: string, subject_name: string): AssessmentClass[] {
+export async function get_assessment_classes(token: string, subject_name: string): Promise<AssessmentClass[]> {
     const url: string = BASE_URL + '/subjects/assessment_classes';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token,
         subject_name: subject_name
-    });
+    };
 
-    let data: {success: boolean, assessment_classes: AssessmentClass[]} = JSON.parse(request(url, json_parameters, 'GET'))
+    let response = await request(url, json_parameters, 'GET')
 
-    if (!data.success) return null;
+    if (!response.success) return null;
 
-    return data.assessment_classes.map((assessment_class) => {
+    return response.assessment_classes.map((assessment_class: AssessmentClass) => {
         return {
             id: assessment_class.id,
             name: assessment_class.name,
@@ -118,34 +147,34 @@ export function get_assessment_classes(token: string, subject_name: string): Ass
     });
 }
 
-export function add_assessment_class(token: string, subject_name: string, assessment_class_name: string): boolean {
+export async function add_assessment_class(token: string, subject_name: string, assessment_class_name: string): Promise<boolean> {
     const url: string = BASE_URL + '/subjects/assessment_classes/add';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token,
         subject_name: subject_name,
         assessment_class_name: assessment_class_name
-    });
+    };
 
-    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'))
+    let response = await request(url, json_parameters, 'POST')
 
-    return data.success;
+    return response.success;
 }
 
-export function get_assessments(token: string, subject_name: string, assessment_class_name: string): Assessment[] {
+export async function get_assessments(token: string, subject_name: string, assessment_class_name: string): Promise<Assessment[]> {
     const url: string = BASE_URL + '/subjects/assessment_classes/assessments';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token,
         subject_name: subject_name,
         assessment_class_name: assessment_class_name
-    });
+    };
 
-    let data: {success: boolean, assessments: Assessment[]} = JSON.parse(request(url, json_parameters, 'GET'));
+    let response = await request(url, json_parameters, 'GET')
 
-    if (!data.success) return null;
+    if (!response.success) return null;
 
-    return data.assessments.map((assessment) => {
+    return response.assessments.map((assessment: Assessment) => {
         return {
             id: assessment.id,
             name: assessment.name,
@@ -155,17 +184,17 @@ export function get_assessments(token: string, subject_name: string, assessment_
     });
 }
 
-export function add_assessment(token: string, subject_name: string, assessment_class_name: string, assessment_name: string): boolean {
+export async function add_assessment(token: string, subject_name: string, assessment_class_name: string, assessment_name: string): Promise<boolean> {
     const url: string = BASE_URL + '/subjects/assessment_classes/assessments/add';
 
-    let json_parameters: string = JSON.stringify({
+    let json_parameters = {
         token: token,
         subject_name: subject_name,
         assessment_class_name: assessment_class_name,
         assessment_name: assessment_name
-    });
+    };
 
-    let data: {success: boolean} = JSON.parse(request(url, json_parameters, 'POST'));
+    let response = await request(url, json_parameters, 'POST')
 
-    return data.success;
+    return response.success;
 }

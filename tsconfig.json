@@ -3,7 +3,8 @@
         "target": "ESNext",
         "lib": ["dom", "ES2019"],
         "pretty": true,
-        "outDir": "scripts"
+        "outDir": "scripts",
+	"watch": true
     },
     "include": [
         "ts-src"
