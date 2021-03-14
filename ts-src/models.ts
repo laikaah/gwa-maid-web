@@ -4,25 +4,29 @@ export interface Response {
 }
 
 export interface Subject {
-    id: number
+    id?: number
     name: string,
     weight: number,
-    assessment_classes_names: string[],
+    assessment_classes?: AssessmentClass[],
     predicted_grade: number
 }
 
 export interface AssessmentClass {
-    id: number
+    id?: number
     name: string,
-    subject_id: number,
+    subject: Subject,
     weight: number,
-    assessments_names: string[],
+    assessments: Assessment[],
     predicted_grade: number
 }
 
 export interface Assessment {
-    id: number,
+    id?: number,
     name: string,
-    assessment_class_id: number,
+    assessment_class: AssessmentClass,
     grade: number
 }
+
+export type json = string | number | boolean | null | json[] | {
+    [key: string]: json | undefined,
+  };

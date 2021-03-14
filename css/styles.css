@@ -5,3 +5,19 @@ body {
     height: 100%;
     width: 100%;
 }
+
+
+/* navbar effects to be dramatic ;) */
+
+nav .navbar-brand {
+    /* size for brand */
+    font-size: xx-large;
+}
+
+.nav-link {
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    font-weight: bold;
+}
