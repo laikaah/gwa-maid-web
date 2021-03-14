@@ -1,5 +1,11 @@
 import { Response, Subject, AssessmentClass, Assessment, json } from './models'
 
+export function saveSubjects(subjects: Subject[]): void {
+    let serialized_subjects = JSON.stringify(subjects);
+
+    localStorage.setItem('subjects', serialized_subjects);
+}
+
 export function getSubjects(): Subject[] | null {
     let subjects_from_local_storage = localStorage.getItem('subjects');
 

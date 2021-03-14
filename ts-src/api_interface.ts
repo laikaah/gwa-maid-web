@@ -1,6 +1,7 @@
 import { Response, Subject, AssessmentClass, Assessment, json } from './models'
 
 const BASE_URL: string = 'http://127.0.0.1:5000'
+const DEFAULT_GRADE = 80;
 
 /*
     Blood, sweat, and tears went into making this whole shamalalabingbing black magic to work. And not the popular Kpop album.
@@ -27,6 +28,9 @@ export async function request(url: string, json_parameters: {[key: string]: any}
         init = <RequestInit>{
             url: url,
             method: method,
+            headers: new Headers({
+                'Accept': 'application/json'
+            }),
             mode: 'cors',
             cors: 'default',
             cache: <RequestCache>'default'
@@ -94,7 +98,7 @@ export async function getSubjects(token: string): Promise<Subject[] | null> {
         token: token
     };
 
-    let response = await request(url, json_parameters, 'GET')
+    let response = await request(url, json_parameters, 'POST')
  
     if (!response.success) return null;
 
@@ -103,18 +107,22 @@ export async function getSubjects(token: string): Promise<Subject[] | null> {
             id: subject.id,
             name: subject.name,
             weight: subject.weight,
-            assessment_classes_names: subject.assessment_classes_names,
+            assessment_classes: subject.assessment_classes,
+            last_updated: subject.last_updated,
             predicted_grade: subject.predicted_grade
         }
     });
 }
 
-export async function addSubject(token: string, subject_name: string, weight: number): Promise<boolean> {
-    const url: string = BASE_URL + '/subject/add';
+export async function addSubject(token: string, subject: Subject): Promise<boolean> {
+    const url: string = BASE_URL + '/subjects/add';
 
     let json_parameters = {
         token: token,
-        subject_name: subject_name
+        subject_name: subject.name,
+        subject_weight: subject.weight,
+        last_updated: new Date().toLocaleString('en-US'),
+        predicted_grade: subject.predicted_grade
     };
 
     let response = await request(url, json_parameters, 'POST');
@@ -146,13 +154,16 @@ export async function addSubject(token: string, subject_name: string, weight: nu
 //     });
 // }
 
-export async function addAssessmentClass(token: string, subject_id: number, assessment_class_name: string): Promise<boolean> {
+export async function addAssessmentClass(token: string, assessment_class: AssessmentClass): Promise<boolean> {
     const url: string = BASE_URL + '/subjects/assessment_classes/add';
 
     let json_parameters = {
         token: token,
-        subject_id: subject_id,
-        assessment_class_name: assessment_class_name
+        subject_name: assessment_class.subject.name,
+        assessment_class_name: assessment_class.name,
+        assessment_class_weight: assessment_class.weight,
+        predicted_grade: assessment_class.predicted_grade,
+        last_updated: new Date().toLocaleString('en-US')
     };
 
     let response = await request(url, json_parameters, 'POST')
@@ -183,14 +194,16 @@ export async function addAssessmentClass(token: string, subject_id: number, asse
 //     });
 // }
 
-export async function addAssessment(token: string, subject_name: string, assessment_class_name: string, assessment_name: string): Promise<boolean> {
+export async function addAssessment(token: string, assessment: Assessment): Promise<boolean> {
     const url: string = BASE_URL + '/subjects/assessment_classes/assessments/add';
 
     let json_parameters = {
         token: token,
-        subject_name: subject_name,
-        assessment_class_name: assessment_class_name,
-        assessment_name: assessment_name
+        subject_name: assessment.assessment_class.subject.name,
+        assessment_class_name: assessment.assessment_class.name,
+        assessment_name: assessment.name,
+        grade: assessment.grade,
+        last_updated: new Date().toLocaleString('en-US')
     };
 
     let response = await request(url, json_parameters, 'POST')

@@ -13,7 +13,8 @@
 
     <link rel='stylesheet' href='../css/styles.css'>
 
-    <script src='../scripts/home.js'></script>
+    <script src='../scripts/home.js' type='module'></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 </head>
 
 <body>
@@ -32,11 +33,14 @@
         <button class="btn btn-primary m-2">Create subject</button>
     </form>
 
+    <button class='m-2' type='button' id='reload'>Refresh</button>
+
     <table class="table p-5 m-5">
         <thead>
             <tr>
                 <th>Subjects</th>
                 <th>Last updated</th>
+                <th>Weight</th>
                 <th>Predicted grade</th>
             </tr>
         </thead>

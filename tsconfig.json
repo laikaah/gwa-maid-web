@@ -4,7 +4,8 @@
         "lib": ["dom", "ES2019"],
         "pretty": true,
         "outDir": "scripts",
-	"watch": true
+        "allowSyntheticDefaultImports": true,
+	    "watch": true
     },
     "include": [
         "ts-src"

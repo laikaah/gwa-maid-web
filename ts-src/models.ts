@@ -8,6 +8,7 @@ export interface Subject {
     name: string,
     weight: number,
     assessment_classes?: AssessmentClass[],
+    last_updated: string,
     predicted_grade: number
 }
 
@@ -16,7 +17,8 @@ export interface AssessmentClass {
     name: string,
     subject: Subject,
     weight: number,
-    assessments: Assessment[],
+    assessments?: Assessment[],
+    last_updated: string,
     predicted_grade: number
 }
 
