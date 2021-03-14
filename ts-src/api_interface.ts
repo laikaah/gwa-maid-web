@@ -1,6 +1,6 @@
 import { Response, Subject, AssessmentClass, Assessment, json } from './models'
 
-const BASE_URL: string = 'http://127.0.0.1:5000'
+export const BASE_URL: string = 'http://127.0.0.1:5000'
 const DEFAULT_GRADE = 80;
 
 /*
