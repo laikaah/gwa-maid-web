@@ -29,10 +29,13 @@ export function writeSubjectsToTable(table: HTMLTableElement, subjects: Subject[
         anchor.setAttribute('href', window.location.origin + '/htdocs/subject.html?' + new URLSearchParams({ subject: subject.name }));
         anchor.innerHTML = subject.name;
 
+        let predicted_grade_in_bold = document.createElement('b')
+        predicted_grade_in_bold.innerText = subject.predicted_grade.toString() + '%'
+
         row.insertCell(0).appendChild(anchor);
-        row.insertCell(1).innerHTML = subject.last_updated;
-        row.insertCell(2).innerHTML = subject.weight.toString() + '%';
-        row.insertCell(3).innerHTML = subject.predicted_grade.toString();
+        row.insertCell(1).innerText = subject.last_updated;
+        row.insertCell(2).innerText = subject.weight.toString() + '%';
+        row.insertCell(3).appendChild(predicted_grade_in_bold);
     });
 
     // replace the old tbody with the new tbody
@@ -53,12 +56,15 @@ export function writeAssessmentClassesToTable(table: HTMLTableElement, assessmen
             '/htdocs/assessment_class.html?' +
             new URLSearchParams({ assessment_class: assessment_class.name }));
 
-        anchor.innerHTML = assessment_class.name;
+        anchor.innerText = assessment_class.name;
+
+        let predicted_grade_in_bold = document.createElement('b')
+        predicted_grade_in_bold.innerText = assessment_class.predicted_grade.toString() + '%'
 
         row.insertCell(0).appendChild(anchor);
         row.insertCell(1).innerText = assessment_class.last_updated;
         row.insertCell(2).innerText = assessment_class.weight.toString() + '%';
-        row.insertCell(3).innerText = assessment_class.predicted_grade.toString();
+        row.insertCell(3).appendChild(predicted_grade_in_bold);
     });
 
     let old_tbody_of_assessment_classes = table.tBodies[0];

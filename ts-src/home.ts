@@ -22,8 +22,6 @@ api.verifyToken(token).then((is_valid) => {
 });
 
 // retrieve subjects from database
-// compare local subjects with remote subjects
-// if they aren't the same,
 // save remote_subjects to local_subjects
 
 if (window.navigator.onLine) {
@@ -50,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
         subject_weight_field.setCustomValidity('');
     }
 
+    if (window.navigator.onLine) {
+        api.getSubjects(token).then(remote_subjects => {
+            cache.saveSubjects(remote_subjects);
+            helpers.writeSubjectsToTable(table, remote_subjects);
+        })
+    }
 
     if (subjects != null) {
         helpers.writeSubjectsToTable(table, subjects);

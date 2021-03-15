@@ -116,8 +116,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // check that the total weight won't go over 100%
         if ((sum_of_weights + assessment_class_weight) / 100 > 1) {
-            let total_weight = (sum_of_weights + assessment_class_weight) / 100
-            let total_weight_in_percent = total_weight.toPrecision(2) + '%'
+            let total_weight = (sum_of_weights + assessment_class_weight)
+            let total_weight_in_percent = total_weight.toPrecision(3) + '%'
 
             assessment_class_weight_field.setCustomValidity(`Adding this weight would result in a cumulative weight of ${total_weight_in_percent}.`);
             assessment_class_weight_field.reportValidity();
