@@ -56,6 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const form: HTMLFormElement = <HTMLFormElement>document.querySelector('form');
 
+    const assessment_class_name_field = <HTMLInputElement>form.elements.namedItem('assessment_class_name');
+    const assessment_class_weight_field = <HTMLInputElement>form.elements.namedItem('assessment_class_weight');
+
+    assessment_class_name_field.oninput = () => {
+        assessment_class_name_field.setCustomValidity('');
+    }
+
+    assessment_class_weight_field.oninput = () => {
+        assessment_class_weight_field.setCustomValidity('');
+    }
+
     if (subject != null){
         helpers.writeAssessmentClassesToTable(table, subject.assessment_classes);
     }
@@ -88,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        let assessment_class_name_field = <HTMLInputElement>form.elements.namedItem('assessment_class_name');
         let assessment_class_name = assessment_class_name_field.value;
 
         // check that the name doesn't already exist
@@ -100,8 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
             assessment_class_name_field.setCustomValidity('');
         }
 
-        
-        let assessment_class_weight_field = <HTMLInputElement>form.elements.namedItem('assessment_class_weight');
         let assessment_class_weight = parseInt(assessment_class_weight_field.value);
 
         let sum_of_weights = subject.assessment_classes.map(assessment_class => assessment_class.weight).reduce((sum, weight) => sum + weight, 0);
@@ -111,7 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let total_weight = (sum_of_weights + assessment_class_weight) / 100
             let total_weight_in_percent = total_weight.toPrecision(2) + '%'
 
-            assessment_class_weight_field.setCustomValidity('Adding this weight would result in a cumulative weight of ' + total_weight_in_percent);
+            assessment_class_weight_field.setCustomValidity(`Adding this weight would result in a cumulative weight of ${total_weight_in_percent}.`);
+            assessment_class_weight_field.reportValidity();
+            return;
         } else {
             assessment_class_weight_field.setCustomValidity('');
         }
@@ -120,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             name: assessment_class_name,
             subject: subject,
             weight: assessment_class_weight,
-            last_updated: new Date().toLocaleString(),
+            last_updated: new Date().toLocaleString('en-US'),
             predicted_grade: api.DEFAULT_GRADE
         };
 
