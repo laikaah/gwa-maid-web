@@ -11,9 +11,9 @@
     <!-- Bootstrap CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-    <link rel='stylesheet' href='styles.css'>
+    <link rel='stylesheet' href='/css/styles.css'>
 
-    <script src='script.js'></script>
+    <script src='/scripts/subject.js' type='module'></script>
 </head>
 
 <body>
@@ -25,29 +25,28 @@
     <form action="" method="post" class="mx-auto w-50">
         <div class="form-group m-2">
             <label>Assessment class name</label>
-            <input type="text" name="assessment_class_name" class="form-control" placeholder="Enter name">
+            <input type="text" name="assessment_class_name" class="form-control" placeholder="Enter name" maxlength="20" required>
         </div>
         <div class="form-group m-2">
             <label>Weight in percent</label>
-            <input type="number" name="assessment_class_weight" class="form-control" placeholder="Enter weight">
+            <input type="number" name="assessment_class_weight" class="form-control" placeholder="Enter weight" max="100" min="0" required>
         </div>
         <button class="btn btn-primary m-2">Create assessment class</button>
     </form>
+
+    <button class='m-2' type='button' id='reload'>Refresh</button>
 
     <table class="table p-5 m-5">
         <thead>
             <tr>
                 <th>Assessment class</th>
                 <th>Last updated</th>
-                <th>Grade</th>
+                <th>Weight</th>
+                <th>Predicted grade</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>CS</td>
-                <td>November 28, 2021</td>
-                <td>1.0</td>
-            </tr>
+
         </tbody>
     </table>
 </body>

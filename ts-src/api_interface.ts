@@ -1,7 +1,7 @@
 import { Response, Subject, AssessmentClass, Assessment, json } from './models'
 
 export const BASE_URL: string = 'http://127.0.0.1:5000'
-const DEFAULT_GRADE = 80;
+export const DEFAULT_GRADE = 80;
 
 /*
     Blood, sweat, and tears went into making this whole shamalalabingbing black magic to work. And not the popular Kpop album.
